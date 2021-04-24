@@ -1,9 +1,11 @@
 import moment from 'moment'
 import Redis from 'ioredis';
+import Queue from 'bee-queue';
+
 
 //util functions
 const time = moment().unix()
-const redis = new Redis({host: process.env.REDIS_HOST})
+const redis = new Redis({host: process.env.REDIS_HOST, port: process.env.REDIS_PORT})
 
 export const logError = (tag, error, info) => {
 
@@ -69,4 +71,17 @@ const getFromRedis = async (identifier) => {
        })
 
     })
+}
+
+export const getQueue = (tag) => {
+    const options = {
+        removeOnSuccess: true,
+        redis: {
+            host:process.env.REDIS_HOST,
+            port:process.env.REDIS_PORT
+        }
+      }
+      
+      const emailQueue = new Queue(tag, options)
+      return emailQueue
 }
