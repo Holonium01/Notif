@@ -1,6 +1,4 @@
 
-import Queue from 'bee-queue';
-
 import EmailService from '../../notification/send-email.js'
 import {getOrders} from '../../handlers/get-orders.js'
 import {logError, saveToStorage, getQueue} from '../../helpers/index.js'
