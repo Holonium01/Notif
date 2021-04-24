@@ -52,17 +52,17 @@ Per-Diem
 This folder contains all the environment variables.
 
 ## workers
-Contains the controllers of the route.
+Contains the cron and the main tasks executed.
 
 ## notification
-Contains middlewares mounted on the route that needs to be executed before the request reaches the intended controller.
+Contains the email server that send the email.
 
 ## models
-This folder contains all the API definitions for the app
+This folder contains all the models
 
 ## handlers
 This contains the main function of the app that interacts with the DB.
 
 ## helpers
-This contains the response handler function that is reused throughout the app
+This contains the util functions that are iften used in the app
 
