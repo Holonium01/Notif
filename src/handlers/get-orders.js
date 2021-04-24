@@ -1,10 +1,8 @@
 
-import Queue from 'bee-queue'
-
 import {OrderModel} from '../models/index.js'
-import {logError} from '../helpers/index.js'
+import {logError, getQueue} from '../helpers/index.js'
 
-const emailQueue = new Queue('email')
+const emailQueue = getQueue('email')
 
 
 export const getOrders = async(payload) => {
