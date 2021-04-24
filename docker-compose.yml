@@ -8,15 +8,9 @@
         - 5300:5300
       links:
         - mongo
-        - redis
     mongo:
       container_name: mongo
       image: mongo
     redis:
-      container_name: redis
-      image: "redis:alpine"
-      command: redis-server /Users/mac/etc/redis/redis.conf --requirepass mypassword
-      ports: 
-        - 6379:6379
-      volumes: 
-        - $PWD/redis.conf:/Users/mac/etc/redis/redis.conf
+      image: redis:latest
+      command: ["redis-server", "--bind", "redis", "--port", "6379"]
