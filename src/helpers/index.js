@@ -7,7 +7,7 @@ import Queue from 'bee-queue';
 const time = moment().unix()
 const redis = new Redis({host: process.env.REDIS_HOST, port: process.env.REDIS_PORT})
 
-export const logError = (tag, error, info) => {
+export const logError = (tag, error, info) => { //log error
 
     console.log({ 
         status: 'failed',
@@ -21,7 +21,7 @@ export const logError = (tag, error, info) => {
     });
 }
 
-export const logSuccess = (tag, message) => {
+export const logSuccess = (tag, message) => { //log succesful crons
 
     saveToStorage({data:message, key: tag})
 
@@ -73,7 +73,7 @@ const getFromRedis = async (identifier) => {
     })
 }
 
-export const getQueue = (tag) => {
+export const getQueue = (tag) => { //return the queue, made a fucntiomn since we're usuing twice
     const options = {
         removeOnSuccess: true,
         redis: {

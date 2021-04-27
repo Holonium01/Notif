@@ -33,7 +33,7 @@ function addBackToQueue(order, error) {
 
   } else {
 
-    order.error = error.response || error.message //if single order failute attac
+    order.error = error.response || error.message //attach error message if order fails
     emailQueue.createJob([order]).save() //retry after first failure
 
   }
@@ -43,7 +43,7 @@ function addBackToQueue(order, error) {
 
 export const sendNotification = async (payload)  => {
 
-    getOrders({hour: payload}) //get orders and all to quue
+    getOrders({hour: payload}) //get orders and all to queue
     EmailServer = new EmailService(payload)
 
 }

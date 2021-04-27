@@ -18,17 +18,18 @@ export const getOrders = async(payload) => {
 }
 
 async function pushOrdersWithinHourToQueue(payload) {
+
     const {hour} = payload
     const currentTime = new Date()
-    const startTime = addMinutes(currentTime, hour)
-    const endTimeHour = hour + getHourEquivalent(hour)
-    const endTime = addMinutes(currentTime, endTimeHour)
+    const startTime = addMinutes(currentTime, hour) //convert the hour to miutes and add to
+    const endTimeHour = hour + getHourEquivalent(hour) //add extra 5 or 29 minutes to the hour.. hour can be 1 or 24
+    const endTime = addMinutes(currentTime, endTimeHour) //convert hour to minute
 
-    //get lenght of total document so we can batch
+    //get lenght of total document so we can batch and not hit db at once if orders are much
     const totalDocumentLength = await OrderModel.countDocuments({pickup_time: {$gte:startTime, $lte: endTime}, fulfilled: false, paid: true}).exec()
 
     if(totalDocumentLength) {
-        getOrdersFromDB(totalDocumentLength, 5000, startTime, endTime) //change to 5000
+        getOrdersFromDB(totalDocumentLength, 5000, startTime, endTime)
     }
 }
 
@@ -45,10 +46,10 @@ function getHourEquivalent(hour) {
 
 function addOrdersToQueue(orders) {
 
-    //split orders into array of 200s and push to queue
+    //split orders into array of 100s and push to queue
     while (orders.length) {
 
-        const data = orders.splice(0, 500)
+        const data = orders.splice(0, 100)
 
         return emailQueue.createJob(data).save()
 
@@ -56,13 +57,12 @@ function addOrdersToQueue(orders) {
 
 }
 async function getOrdersFromDB(totalDocumentLength, limit, startTime, endTime) {
-    //get paid orders that are unfufilled and falls withing time range
 
     const times = Math.ceil(totalDocumentLength / limit) //query the DB with limit of 5000 documents at a time
     let lastId
     for (let i = 0; i < times; i++) {
         let orders
-        if(i === 0){ //leveraging sequential objectId to pull orders in a paginated format
+        if(i === 0){ //leveraging sequential objectId to pull orders in a paginated format instead of using skip() which is not optimal
             orders = await OrderModel.find({pickup_time: {$gte:startTime, $lte: endTime}, fulfilled: false, paid: true}, {limit}).populate('user', '-_id name email').populate('store', '-_id name').lean().exec()
             if(orders.length) lastId = orders[orders.length - 1]._id
         } else {
@@ -72,5 +72,3 @@ async function getOrdersFromDB(totalDocumentLength, limit, startTime, endTime) {
         if(orders) addOrdersToQueue(orders)
     }
 }
-
-//do my find, use last objectId of the last to get next and limit it then continue

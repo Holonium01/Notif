@@ -34,7 +34,7 @@ const startServer = async () => {
 		console.log(`Started!!! Server listening on ${PORT}`);
 		});
 		
-		scheduleTasks() //initialize the sron
+		scheduleTasks() //initialize the cron
 
 	} catch (error) {
 
