@@ -64,5 +64,5 @@ This folder contains all the models
 This contains the main function of the app that interacts with the DB.
 
 ## helpers
-This contains the util functions that are iften used in the app
+This contains the util functions that are often used in the app
 
