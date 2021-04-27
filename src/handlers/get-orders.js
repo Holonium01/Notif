@@ -28,7 +28,7 @@ async function pushOrdersWithinHourToQueue(payload) {
     const totalDocumentLength = await OrderModel.countDocuments({pickup_time: {$gte:startTime, $lte: endTime}, fulfilled: false, paid: true}).exec()
 
     if(totalDocumentLength) {
-        getOrdersFromDB(totalDocumentLength, 5000) //change to 5000
+        getOrdersFromDB(totalDocumentLength, 5000, startTime, endTime) //change to 5000
     }
 }
 
@@ -55,20 +55,19 @@ function addOrdersToQueue(orders) {
     }
 
 }
-async function getOrdersFromDB(totalDocumentLength, limit) {
+async function getOrdersFromDB(totalDocumentLength, limit, startTime, endTime) {
     //get paid orders that are unfufilled and falls withing time range
 
     const times = Math.ceil(totalDocumentLength / limit) //query the DB with limit of 5000 documents at a time
-
+    let lastId
     for (let i = 0; i < times; i++) {
         let orders
-        let lastId
         if(i === 0){ //leveraging sequential objectId to pull orders in a paginated format
             orders = await OrderModel.find({pickup_time: {$gte:startTime, $lte: endTime}, fulfilled: false, paid: true}, {limit}).populate('user', '-_id name email').populate('store', '-_id name').lean().exec()
-            if(orders) lastId = orders[orders.length - 1]._id
+            if(orders.length) lastId = orders[orders.length - 1]._id
         } else {
             if(lastId) orders = await OrderModel.find({_id: { $gt: lastId}, pickup_time: {$gte:startTime, $lte: endTime}, fulfilled: false, paid: true},{limit}).populate('user', '-_id name email').populate('store', '-_id name').lean().exec()
-            if(orders) lastId = orders[orders.length - 1]._id
+            if(orders.length) lastId = orders[orders.length - 1]._id
         }
         if(orders) addOrdersToQueue(orders)
     }

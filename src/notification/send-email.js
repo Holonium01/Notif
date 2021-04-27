@@ -47,7 +47,7 @@ export default class EmailService {
   
           subject: 'Pickup Notification',
   
-          text:`This is to remind you that your order: ${payload._id} from: ${payload.store && payload.store.namr} is due for pickup in the next ${this.pickup_hour} at ${this.pickup_location}`
+          text:`This is to remind you that your order: ${payload._id} from: ${payload.store && payload.store.name} is due for pickup in the next ${this.pickup_hour} at ${this.pickup_location}`
   
         }      
     }

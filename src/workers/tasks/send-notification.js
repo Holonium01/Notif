@@ -18,8 +18,8 @@ async function sendMailToUsers(orders, done) {
       await Promise.allSettled(requests)
         .then(()=>  done())
         .catch((error) => {
-         done()
-         logError('sendMailToUsers', error, {failedOrders: orders})
+          done()
+          logError('sendMailToUsers', error, {failedOrders: orders})
         })
  
   }

@@ -40,7 +40,7 @@ export const saveToStorage = async (payload) => {
 
     const content = await getFromRedis(key) || []
     content.push(data)
-    saveToRedis(content)
+    saveToRedis(key, content)
 
 }
 
