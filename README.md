@@ -1,18 +1,17 @@
 # Simple Notification System. 
 
-This is an notication system that sends a twnety-four hour and one-hour email reminder for order pickup
+This is a notication system that sends a twnety-four hour and one-hour email reminder for order pickup
 
 # Geting  Started.
 - To Start server,  run `node server` or `docker-compose up`
 
-# DEsign  Document.
+# Design  Document.
 - url https://smallpdf.com/shared#st=2d8af6c6-32cc-410c-97cc-df06e4dfb55e&fn=Notification+system+design.pdf&ct=1619295590948&tl=share-document&rf=link
 
-- Note, this URL will be unavalable after 14 days, strting from 24th April, 2021
+- Note: this URL will be unavalable after 14 days, strting from 24th April, 2021
 
-## Files Structure
+## File Structure
 ```
-Per-Diem
 ├── package.json
 ├── package-lock.json
 ├── .env
